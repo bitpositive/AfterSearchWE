@@ -1,0 +1,84 @@
+
+.afarea-hover {
+    text-align: left !important;
+    position: fixed;
+    z-index: 2147483647;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 28px;
+    border: 0px none;
+    background: white;
+    opacity: 0;
+}
+.afarea-hover:hover {
+    opacity: 1;
+}
+
+.afarea-off {
+    text-align: left !important;
+    position: fixed;
+    z-index: 2147483647;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 28px;
+    border: 0px none;
+    background: white;
+    opacity: 1;
+    display: none;
+}
+.afarea-off:hover {
+    opacity: 1;
+}
+
+.aflabel {
+    display: inline-block;
+    margin: 3px 6px !important;
+    padding: 2px !important;
+    line-height: 14px !important;
+    text-decoration: none !important;
+    font-size: 13px !important;
+    font-family: Helvetica !important;
+    font-weight: normal !important;
+    color: black !important;
+    background-color: white !important;
+    box-sizing: content-box !important;
+    letter-spacing: normal !important;
+    overflow-wrap: normal !important;
+}
+
+.flatbutton {
+    margin: 3px 4px !important;
+    display: inline-block !important;
+    padding: 2px 0px !important;
+    text-decoration: none !important;
+    font-size: 13px !important;
+    line-height: 14px !important;
+    font-weight: normal !important;
+    font-family: Helvetica !important;
+    color: #ef0fff !important;
+    border: solid 2px #ef0fff !important;
+    background-color: white !important;
+    border-radius: 3px !important;
+    box-sizing: content-box !important;
+    transition: .1s !important;
+    letter-spacing: normal !important;
+    overflow-wrap: normal !important;
+    pointer-events: all !important;
+    min-height: initial !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    background-image: none !important;
+    text-transform: none !important;
+    height: auto !important;   
+}
+
+.flatbutton:active {
+    background-color: #ef0fff !important;
+    color: white !important;
+}
+
+.flatbutton::-moz-focus-inner {
+    border :0px;
+}

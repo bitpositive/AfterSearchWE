@@ -1,0 +1,43 @@
+// -*- coding:utf-8 -*-
+
+{    
+    "manifest_version": 2,
+    "name": "AfterSearchWE",
+    "version": "1.0.4",
+    
+    "description": "This project is aimed at replacing SearchWP.",
+    
+    "icons": {
+        "48": "icons/search-48.png",
+        "96": "icons/search-96.png"
+    },
+    
+    "permissions": [
+        "activeTab",
+        "storage",
+        "tabs",
+        "find",
+        "<all_urls>"
+    ],
+    
+    "browser_action": {
+        "browser_style": true,
+        "default_popup": "popup/choose_mode.html",
+        "default_icon": {
+        "48": "icons/search-48.png",
+        "96": "icons/search-96.png"
+        }
+    },
+    
+    "content_scripts": [
+        {
+            "matches": ["<all_urls>"],
+            "js": ["contentscripts/script.js"],
+            "css" : ["contentscripts/style.css"]
+        }
+    ],
+
+    "background" : {
+        "scripts": ["background.js"]
+    }
+}
