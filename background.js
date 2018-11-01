@@ -5,6 +5,8 @@ var offset = 180;
 var count = 0;
 var lastPos = 0;
 
+var afweMode = 0;
+
 function found( flag, results ) {
     if (results.count > 0) {
         browser.find.highlightResults();
@@ -75,4 +77,38 @@ browser.runtime.onMessage.addListener( function( req, sender, response ) {
 // タブを閉じる際に検索文字列も消去する
 browser.tabs.onRemoved.addListener( function( tabId, info ) {
     browser.storage.local.remove( [String( tabId )], function() {} );
+});
+// タブを開く際にも検索文字列を消去する
+browser.tabs.onCreated.addListener( function( tabId, info ) {
+    browser.storage.local.remove( [String( tabId )], function() {} );
+});
+
+// Change to current mode when switched tabs
+browser.tabs.onUpdated.addListener( function( tabId, info ) {
+    let message = {
+        cmd: "changeModeAFWE",
+        mode: afweMode
+    };
+    browser.tabs.sendMessage( tabId, message, function() {} );
+});
+
+// Change mode of AFWE
+function changeModeAFWE( result, mode ) {
+    let id = result.shift().id;
+    let message = {
+        cmd: "changeModeAFWE",
+        mode: afweMode
+    };
+    browser.tabs.sendMessage( id, message, function() {} );
+}
+
+browser.browserAction.onClicked.addListener( function() {
+    if ( afweMode < 2 ) {
+        afweMode = afweMode + 1;
+    } else {
+        afweMode = 0;
+    }
+    
+    browser.tabs.query( {active: true, currentWindow: true} ).then( changeModeAFWE.bind( this ) );
+    
 });

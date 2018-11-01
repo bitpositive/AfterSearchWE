@@ -3,6 +3,7 @@
 var buttonChanged = new Boolean( false );
 var latestSerText = "";
 
+
 // Search Web Page
 var onButton = function( num ) {   
     if ( buttonChanged ) {
@@ -69,7 +70,6 @@ if ( activeTabURL.indexOf("www.google.") >= 0 && activeTabURL.indexOf("search?")
     });
 }
 
-
 // Create AfterSearch Bar /////////////////////////////////////////////////
 if ( document.getElementById( "aftersearcharea" ) == null ) {
     let AfterSearchArea = document.createElement( "div" );
@@ -100,16 +100,20 @@ browser.runtime.onMessage.addListener( function( message, sender, sendResponse )
             button.onclick = function( ){ onButton( Number( String( this.id ).charAt(10) ) ); };
             document.getElementById( "aftersearcharea" ).appendChild( button );
         }
-    } else if ( message.cmd == "changeMode" ) {
+    } else if ( message.cmd == "changeModeAFWE" ) {
+        let afweMode = message.mode;
         if ( document.getElementById( "aftersearcharea" ) != null ) {
-            let modeStr = message.mode;
-            if ( modeStr == "Enable" ) {
+            if ( afweMode == 0 ) {
+                // Default view: hover
                 document.getElementById( "aftersearcharea" ).setAttribute( "class", "afarea-hover" );
-            } else if ( modeStr == "Disable" ) {
-                document.getElementById( "aftersearcharea" ).setAttribute( "class", "afarea-off" );
+            } else if ( afweMode == 1 ) {
+                // Second view: force shown
+                document.getElementById( "aftersearcharea" ).setAttribute( "class", "afarea-shown" );
+            } else if ( afweMode == 2 ) {
+                // Third view: force not to shown
+                document.getElementById( "aftersearcharea" ).setAttribute( "class", "afarea-nottoshown" );
             }
         }
     }
 });
-
 

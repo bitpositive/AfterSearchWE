@@ -20,4 +20,4 @@ BSD 2-Clause License.
 
 ## Author
 
-[T.Kawamura](https://github.com/babylonica)
+[BitPositive]
