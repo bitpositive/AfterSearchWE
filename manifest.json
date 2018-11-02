@@ -8,8 +8,8 @@
     "description": "A better way for \"Search on page\". This project is aimed at replacing SearchWP.",
     
     "icons": {
-        "48": "icons/search-48.png",
-        "96": "icons/search-96.png"
+        "48": "icons/aftersearchwe_icon_default_48.png",
+        "96": "icons/aftersearchwe_icon_default_96.png"
     },
     
     "permissions": [
@@ -22,10 +22,10 @@
     
     "browser_action": {
         "default_icon": {
-        "48": "icons/search-48.png",
-        "96": "icons/search-96.png"
+            "48": "icons/aftersearchwe_icon_default_48.png",
+            "96": "icons/aftersearchwe_icon_default_96.png"
         },
-        "default_title": "Change mode: Hover/Shown/Disable"
+        "default_title": "Change mode(Hover/Shown/Disable)"
     },
     
     "content_scripts": [

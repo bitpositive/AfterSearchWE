@@ -93,7 +93,7 @@ browser.tabs.onUpdated.addListener( function( tabId, info ) {
 });
 
 // Change mode of AFWE
-function changeModeAFWE( result, mode ) {
+function changeModeAFWE( result ) {
     let id = result.shift().id;
     let message = {
         cmd: "changeModeAFWE",
@@ -102,13 +102,45 @@ function changeModeAFWE( result, mode ) {
     browser.tabs.sendMessage( id, message, function() {} );
 }
 
+function updateIcon() {
+    if ( afweMode == 0 ) {
+        browser.browserAction.setIcon(
+            {
+                path: {
+                    48: "icons/aftersearchwe_icon_default_48.png",
+                    96: "icons/aftersearchwe_icon_default_96.png"
+                }
+            }
+        );
+    } else if ( afweMode == 1 ) {
+        browser.browserAction.setIcon(
+            {
+                path: {
+                    48: "icons/aftersearchwe_icon_green_48.png",
+                    96: "icons/aftersearchwe_icon_green_96.png"
+                }
+            }
+        );
+    } else if ( afweMode == 2 ) {
+        browser.browserAction.setIcon(
+            {
+                path: {
+                    48: "icons/aftersearchwe_icon_red_48.png",
+                    96: "icons/aftersearchwe_icon_red_96.png"
+                }
+            }
+        );
+    }
+}
+
 browser.browserAction.onClicked.addListener( function() {
     if ( afweMode < 2 ) {
         afweMode = afweMode + 1;
     } else {
         afweMode = 0;
     }
-    
+    updateIcon();
     browser.tabs.query( {active: true, currentWindow: true} ).then( changeModeAFWE.bind( this ) );
     
 });
+
