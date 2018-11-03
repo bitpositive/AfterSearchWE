@@ -25,7 +25,7 @@
             "48": "icons/aftersearchwe_icon_default_48.png",
             "96": "icons/aftersearchwe_icon_default_96.png"
         },
-        "default_title": "Change mode(Hover/Shown/Disable)"
+        "default_title": "Mode: Mouseover"
     },
     
     "content_scripts": [

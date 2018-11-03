@@ -12,6 +12,10 @@
     background: rgba(255, 255, 255, 0.8);
     opacity: 0;
     transition: 0.5s;
+    box-shadow: 0px 2px 4px;
+    /* for align vertial center */
+    display: flex !important;
+    align-items: center !important;
 }
 .afarea-hover:hover {
     opacity: 1;
@@ -31,6 +35,10 @@
     border: 0px none;
     background: rgba(255, 255, 255, 0.8);
     opacity: 1;
+    box-shadow: 0px 2px 4px;
+    /* for align vertial center */
+    display: flex !important;
+    align-items: center !important;
 }
 
 .afarea-nottoshown {
@@ -46,6 +54,10 @@
     border: 0px none;
     background: rgba(255, 255, 255, 0.8);
     opacity: 0;
+    pointer-events: none;
+    /* for align vertial center */
+    display: flex !important;
+    align-items: center !important;
 }
 
 .aflabel {

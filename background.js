@@ -1,10 +1,8 @@
 // -*- coding:utf-8-unix -*-
 
 var offset = 180;
-
 var count = 0;
 var lastPos = 0;
-
 var afweMode = 0;
 
 function found( flag, results ) {
@@ -104,6 +102,7 @@ function changeModeAFWE( result ) {
 
 function updateIcon() {
     if ( afweMode == 0 ) {
+        browser.browserAction.setTitle({title: "Mode: Mouseover"});
         browser.browserAction.setIcon(
             {
                 path: {
@@ -113,6 +112,7 @@ function updateIcon() {
             }
         );
     } else if ( afweMode == 1 ) {
+        browser.browserAction.setTitle({title: "Mode: Always Shown"});
         browser.browserAction.setIcon(
             {
                 path: {
@@ -122,6 +122,7 @@ function updateIcon() {
             }
         );
     } else if ( afweMode == 2 ) {
+        browser.browserAction.setTitle({title: "Mode: Disable"});
         browser.browserAction.setIcon(
             {
                 path: {
