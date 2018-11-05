@@ -3,7 +3,7 @@
 {    
     "manifest_version": 2,
     "name": "AfterSearchWE",
-    "version": "2.0.0",
+    "version": "2.0.3",
     
     "description": "A better way for \"Search on page\". This project is aimed at replacing SearchWP.",
     
