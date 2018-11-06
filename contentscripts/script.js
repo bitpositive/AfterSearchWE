@@ -2,7 +2,7 @@
 
 var buttonChanged = new Boolean( false );
 var latestSerText = "";
-
+var pressCount = 0;
 
 // Search Web Page
 var onButton = function( num ) {   
@@ -20,7 +20,9 @@ var onButton = function( num ) {
     browser.runtime.sendMessage({
         cmd: "find",
         toFind: searchText,
-        flag: buttonChanged
+        flag: buttonChanged,
+        height: document.documentElement.clientHeight,
+        pageSize: document.documentElement.scrollHeight || document.body.scrollHeight
     });
 }
 
