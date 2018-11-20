@@ -23,7 +23,7 @@ function found( flag, height, pageSize, findResults ) {
                     for (var i = 0; i < results.rectData.length; i++) {
                         if ( results.rectData[i].rectsAndTexts.rectList[0] != void 0 ) {
                             var pos = results.rectData[i].rectsAndTexts.rectList[0].top;                        
-                            if ( i == 0 || ( pos != tempPos && pos > scrollOffset && pos < pageSize - ( height - scrollOffset ) && pos != height - buttonPosOffset ) ) {
+                            if ( i == 0 || ( pos != tempPos && pos > scrollOffset && pos < pageSize - ( height - scrollOffset ) && ( pos > height - buttonPosOffset + 5 || pos < height - buttonPosOffset - 5 ) ) ) {
                                 poses.push( pos );
                             }
                             tempPos = pos;                            
@@ -108,7 +108,7 @@ browser.tabs.onRemoved.addListener( function( tabId, info ) {
     browser.storage.local.remove( [String( tabId ) + "_count"], function() {} );
 });
 // タブを開く際にも検索文字列を消去する
-browser.tabs.onCreated.addListener( function( tabId, info ) {
+browser.tabs.onCreated.addListener( function( tabId, info, tab ) {
     browser.storage.local.remove( [String( tabId ) + "_str"], function() {} );
     browser.storage.local.remove( [String( tabId ) + "_count"], function() {} );
 });

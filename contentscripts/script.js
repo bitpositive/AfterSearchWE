@@ -27,11 +27,33 @@ var onButton = function( num ) {
 }
 
 // Get Search String //////////////////////////////////////////////////////
-let activeTabURL = String( window.location.href );
-if ( activeTabURL.indexOf("www.google.") >= 0 && activeTabURL.indexOf("search?") >= 0 ) {
+var activeTabURL = String( window.location.href );
+var url = new URL( activeTabURL );
+var params = "__aftersearch__noparam__";
+if ( activeTabURL.indexOf("www.google.") >= 0 && activeTabURL.indexOf("/search?") >= 0 ) {
     // Get String from Search Page
-    let url = new URL( activeTabURL );
-    let params = url.searchParams.get( "q" );
+    params = url.searchParams.get( "q" );
+} else if ( activeTabURL.indexOf("www.bing.com") >= 0 && activeTabURL.indexOf("/search?") >= 0 ) {
+    // Get String from Search Page
+    params = url.searchParams.get( "q" );
+} else if ( activeTabURL.indexOf("search.yahoo.") >= 0 && activeTabURL.indexOf("/search") >= 0 ) {
+    // Get String from Search Page
+    params = url.searchParams.get( "p" );
+} else if ( activeTabURL.indexOf("duckduckgo.com/?") >= 0 ) {
+    // Get String from Search Page
+    params = url.searchParams.get( "q" );
+} else if ( activeTabURL.indexOf("www.amazon.") >= 0 && activeTabURL.indexOf("search-alias") >= 0 ) {
+    // Get String from Search Page
+    params = url.searchParams.get( "field-keywords" );
+} else if ( activeTabURL.indexOf("twitter.com/search?") >= 0 ) {
+    // Get String from Search Page
+    params = url.searchParams.get( "q" );
+} else if ( activeTabURL.indexOf("wikipedia.org") >= 0 && activeTabURL.indexOf("?search") >= 0 ) {
+    // Get String from Search Page
+    params = url.searchParams.get( "search" );
+}
+
+if ( params != "__aftersearch__noparam__" ) {
     if ( ( params.split( "\"" ).length - 1 ) % 2 != 0 ) {
         params = params.replace( /\"/g, "" );
     }
