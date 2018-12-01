@@ -106,7 +106,7 @@ if ( document.getElementById( "aftersearcharea" ) == null ) {
     Label.innerHTML = "&nbsp;&nbsp;AfterSearch&nbsp;";
     AfterSearchArea.appendChild( Label );
     document.body.appendChild( AfterSearchArea );
-    
+
     browser.runtime.sendMessage({
         cmd: "createButtons"
     });
@@ -114,6 +114,19 @@ if ( document.getElementById( "aftersearcharea" ) == null ) {
 
 browser.runtime.onMessage.addListener( function( message, sender, sendResponse ) {
     if ( message.cmd == "createButtons" ) {
+        if ( document.getElementById( "aftersearcharea" ) == null ) {
+            let AfterSearchArea = document.createElement( "div" );
+            AfterSearchArea.setAttribute( "id", "aftersearcharea" );
+            AfterSearchArea.setAttribute( "class", "afarea-hover" );
+            AfterSearchArea.setAttribute( "scrolling", "no" );
+            // "AfterSearch" Label
+            let Label = document.createElement( "p" );
+            Label.setAttribute( "class", "aflabel" );
+            Label.innerHTML = "&nbsp;&nbsp;AfterSearch&nbsp;";
+            AfterSearchArea.appendChild( Label );
+            document.body.appendChild( AfterSearchArea );
+        }
+        
         let strs = message.strings;
         // Create Buttons
         for ( var i = 0; i < strs.length; i++ ) {
@@ -140,4 +153,3 @@ browser.runtime.onMessage.addListener( function( message, sender, sendResponse )
         }
     }
 });
-

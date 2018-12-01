@@ -107,10 +107,19 @@ browser.tabs.onRemoved.addListener( function( tabId, info ) {
     browser.storage.local.remove( [String( tabId ) + "_str"], function() {} );
     browser.storage.local.remove( [String( tabId ) + "_count"], function() {} );
 });
-// タブを開く際にも検索文字列を消去する
-browser.tabs.onCreated.addListener( function( tabId, info, tab ) {
-    browser.storage.local.remove( [String( tabId ) + "_str"], function() {} );
-    browser.storage.local.remove( [String( tabId ) + "_count"], function() {} );
+// タブを開く際にも検索文字列を消去する(新しいタブで開いたとき以外)
+browser.tabs.onCreated.addListener( function( tab ) {
+    browser.storage.local.remove( [String( tab.id ) + "_str"], function() {} );
+    browser.storage.local.remove( [String( tab.id ) + "_count"], function() {} );
+    
+    if ( tab.openerTabId != void 0 ) {        
+        browser.storage.local.get( [String( tab.openerTabId ) + "_str"], function( item ) {
+            let strs = item[String( tab.openerTabId ) + "_str"];
+            let data = {};
+            data[String(tab.id) + "_str"] = strs;
+            browser.storage.local.set( data, function() {} );            
+        } );
+    }
 });
 
 browser.tabs.onUpdated.addListener( function( tabId, info,  urls = ["http://*/*", "https://*/*", "ftp://*/*" ] ) {
