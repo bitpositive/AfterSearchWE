@@ -2,7 +2,7 @@
 
 var buttonPosOffset = 23;
 var scrollOffset = 180;
-var afweMode = 0;
+var asweMode = 0;
 
 function found( flag, height, pageSize, findResults ) {
     var results = findResults;
@@ -99,15 +99,21 @@ browser.runtime.onMessage.addListener( function( req, sender, response ) {
     } else if ( req.cmd == "createButtons" ) {
         browser.tabs.query( {active: true, currentWindow: true} ).then( createBtn.bind( this ) );
         return true;
+    } else if ( req.cmd == "removehighlights" ) {
+        browser.tabs.query( {active: true, currentWindow: true} ).then( browser.find.removeHighlighting() );
     }
 });
 
-// タブを閉じる際に検索文字列も消去する
+// タブを閉じるとき
 browser.tabs.onRemoved.addListener( function( tabId, info ) {
     browser.storage.local.remove( [String( tabId ) + "_str"], function() {} );
     browser.storage.local.remove( [String( tabId ) + "_count"], function() {} );
+
+    let data = {};
+    data["asweMode"] = asweMode;
+    browser.storage.local.set( data, function() {} );    
 });
-// タブを開く際にも検索文字列を消去する(新しいタブで開いたとき以外)
+// タブを開くとき
 browser.tabs.onCreated.addListener( function( tab ) {
     browser.storage.local.remove( [String( tab.id ) + "_str"], function() {} );
     browser.storage.local.remove( [String( tab.id ) + "_count"], function() {} );
@@ -117,9 +123,22 @@ browser.tabs.onCreated.addListener( function( tab ) {
             let strs = item[String( tab.openerTabId ) + "_str"];
             let data = {};
             data[String(tab.id) + "_str"] = strs;
-            browser.storage.local.set( data, function() {} );            
+            browser.storage.local.set( data, function() {} );
         } );
     }
+    
+    browser.storage.local.get( ["asweMode"], function( item ) {
+        if (typeof item["asweMode"] === 'undefined') {
+            let data = {};
+            data["asweMode"] = 0;
+            browser.storage.local.set( data, function() {} );
+
+            asweMode = data["asweMode"];
+        } else {
+            asweMode = item["asweMode"];
+        }
+        
+    } );
 });
 
 browser.tabs.onUpdated.addListener( function( tabId, info,  urls = ["http://*/*", "https://*/*", "ftp://*/*" ] ) {
@@ -127,7 +146,7 @@ browser.tabs.onUpdated.addListener( function( tabId, info,  urls = ["http://*/*"
         // Change mode when switched tabs
         let message = {
             cmd: "changeModeAFWE",
-            mode: afweMode
+            mode: asweMode
         };
         browser.tabs.sendMessage( tabId, message, function() {} );
     }
@@ -138,13 +157,13 @@ function changeModeAFWE( result ) {
     let id = result.shift().id;
     let message = {
         cmd: "changeModeAFWE",
-        mode: afweMode
+        mode: asweMode
     };
     browser.tabs.sendMessage( id, message, function() {} );
 }
 
 function updateIcon() {
-    if ( afweMode == 0 ) {
+    if ( asweMode == 0 ) {
         browser.browserAction.setTitle({title: "Mode: Mouseover"});
         browser.browserAction.setIcon(
             {
@@ -154,7 +173,7 @@ function updateIcon() {
                 }
             }
         );
-    } else if ( afweMode == 1 ) {
+    } else if ( asweMode == 1 ) {
         browser.browserAction.setTitle({title: "Mode: Always Shown"});
         browser.browserAction.setIcon(
             {
@@ -164,7 +183,7 @@ function updateIcon() {
                 }
             }
         );
-    } else if ( afweMode == 2 ) {
+    } else if ( asweMode == 2 ) {
         browser.browserAction.setTitle({title: "Mode: Disable"});
         browser.browserAction.setIcon(
             {
@@ -178,10 +197,10 @@ function updateIcon() {
 }
 
 browser.browserAction.onClicked.addListener( function() {
-    if ( afweMode < 2 ) {
-        afweMode = afweMode + 1;
+    if ( asweMode < 2 ) {
+        asweMode = asweMode + 1;
     } else {
-        afweMode = 0;
+        asweMode = 0;
     }
     updateIcon();
     browser.tabs.query( {active: true, currentWindow: true} ).then( changeModeAFWE.bind( this ) );

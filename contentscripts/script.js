@@ -26,6 +26,13 @@ var onButton = function( num ) {
     });
 }
 
+// Remove highlights
+var onRemoveButton = function() {
+    browser.runtime.sendMessage({
+        cmd: "removehighlights"
+    });
+}
+
 // Get Search String //////////////////////////////////////////////////////
 var activeTabURL = String( window.location.href );
 var url = new URL( activeTabURL );
@@ -137,6 +144,14 @@ browser.runtime.onMessage.addListener( function( message, sender, sendResponse )
             button.onclick = function( ){ onButton( Number( String( this.id ).charAt(10) ) ); };
             document.getElementById( "aftersearcharea" ).appendChild( button );
         }
+        
+        // Create a remove highlight button
+        let removebutton = document.createElement( "button" );
+        removebutton.textContent = "Remove highlights";
+        removebutton.classList.add( "flatbutton_remove" );
+        removebutton.setAttribute( "id", "flatbutton_aswe_removehighlight" );
+        removebutton.onclick = function( ){ onRemoveButton(); }
+        document.getElementById( "aftersearcharea" ).appendChild( removebutton );
     } else if ( message.cmd == "changeModeAFWE" ) {
         let afweMode = message.mode;
         if ( document.getElementById( "aftersearcharea" ) != null ) {
