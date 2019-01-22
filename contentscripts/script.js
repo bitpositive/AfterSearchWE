@@ -80,7 +80,7 @@ if ( params != "__aftersearch__noparam__" ) {
             searchStrs.push( temp );         
         } else if ( dQuoteRead === true && paramsArray[i] !== "\"" ) {
             temp += paramsArray[i];
-        } else if ( paramsArray[i] === " " ) {
+        } else if ( paramsArray[i] === " " ||  paramsArray[i] === "　") {
             searchStrs.push( temp );
             temp = "";
         } else if( paramsArray[i] !== "\"" ) {

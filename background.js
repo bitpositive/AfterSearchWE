@@ -111,8 +111,9 @@ browser.tabs.onRemoved.addListener( function( tabId, info ) {
 
     let data = {};
     data["asweMode"] = asweMode;
-    browser.storage.local.set( data, function() {} );    
+    browser.storage.local.set( data, function() {} );
 });
+
 // タブを開くとき
 browser.tabs.onCreated.addListener( function( tab ) {
     browser.storage.local.remove( [String( tab.id ) + "_str"], function() {} );
@@ -128,7 +129,7 @@ browser.tabs.onCreated.addListener( function( tab ) {
     }
     
     browser.storage.local.get( ["asweMode"], function( item ) {
-        if (typeof item["asweMode"] === 'undefined') {
+        if ( typeof item["asweMode"] != 'string' ) {
             let data = {};
             data["asweMode"] = 0;
             browser.storage.local.set( data, function() {} );
