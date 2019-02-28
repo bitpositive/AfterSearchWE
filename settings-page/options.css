@@ -1,0 +1,28 @@
+
+.radioBox{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.radio{
+    margin: 8px;
+    font-weight: 350;
+    font-size: 1.2em;
+}
+
+.SaveButton{
+    background-color: #e1e1e1;
+    color: black;
+    text-align: center;
+    font-weight: 350;
+    font-size: 1.2em;
+    border-style: none;
+    display: block;
+    margin: 0 0 0 auto;
+    padding: 4px 8px;
+}
+
+.SaveButton:hover{
+    background-color: #c9c9c9;
+}

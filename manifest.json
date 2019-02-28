@@ -3,13 +3,13 @@
 {    
     "manifest_version": 2,
     "name": "AfterSearchWE",
-    "version": "2.1.3",
+    "version": "2.2.0",
     
     "description": "A better way for \"Search on page\". This project is aimed at replacing SearchWP.",
     
     "icons": {
-        "48": "icons/aftersearchwe_icon_default_48.png",
-        "96": "icons/aftersearchwe_icon_default_96.png"
+        "48": "icons/ASWE_icon_normal_48.png",
+        "96": "icons/ASWE_icon_normal_96.png"
     },
     
     "permissions": [
@@ -22,22 +22,31 @@
     
     "browser_action": {
         "default_icon": {
-            "48": "icons/aftersearchwe_icon_default_48.png",
-            "96": "icons/aftersearchwe_icon_default_96.png"
+            "48": "icons/ASWE_icon_normal_48.png",
+            "96": "icons/ASWE_icon_normal_96.png"
         },
         "default_title": "Mode: Mouseover"
     },
-    
+
+    "background" : {
+        "scripts": [
+            "background.js"
+        ]
+    },
+
     "content_scripts": [
         {
             "matches": [ "http://*/*", "https://*/*", "ftp://*/*" ],
-            "js": ["contentscripts/script.js"],
+            "js": [
+                "contentscripts/script.js"
+            ],
             "css" : ["contentscripts/style.css"],
             "run_at": "document_end"
         }
     ],
 
-    "background" : {
-        "scripts": ["background.js"]
+    "options_ui": {
+        "page": "settings-page/options.html",
+        "browser_style": true
     }
 }

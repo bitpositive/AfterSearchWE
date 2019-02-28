@@ -1,26 +1,28 @@
 // -*- coding:utf-8-unix -*-
 
-var buttonChanged = new Boolean( false );
-var latestSerText = "";
-var pressCount = 0;
+var ButtonChanged = new Boolean( false );
+var LatestSerText = "";
+var PressCount = 0;
+var IsPositionSettingBottom = new Boolean( true );
+
 
 // Search Web Page
 var onButton = function( num ) {   
-    if ( buttonChanged ) {
-        buttonChanged = false;
+    if ( ButtonChanged ) {
+        ButtonChanged = false;
     }
     
     let searchText = document.getElementById( "flatbutton" + String( num ) ).innerHTML;
     
-    if ( latestSerText != searchText ) {
-        buttonChanged = true;
+    if ( LatestSerText != searchText ) {
+        ButtonChanged = true;
     }
-    latestSerText = searchText;
+    LatestSerText = searchText;
     
     browser.runtime.sendMessage({
         cmd: "find",
         toFind: searchText,
-        flag: buttonChanged,
+        flag: ButtonChanged,
         height: document.documentElement.clientHeight,
         pageSize: document.documentElement.scrollHeight || document.body.scrollHeight
     });
@@ -32,6 +34,27 @@ var onRemoveButton = function() {
         cmd: "removehighlights"
     });
 }
+
+// Get Position Setting ///////////////////////////////////////////////////////
+function onError( error ) {
+    console.log( `Error: ${error}` );
+}
+
+function onGotPosition( item ) {
+    var position = "bottom";
+    if ( item.position ) {
+        position = item.position;
+    }
+    
+    if ( position == "bottom" ) {
+        IsPositionSettingBottom = true;
+    } else {
+        IsPositionSettingBottom = false;
+    }
+}
+
+var getting = browser.storage.local.get( "position" );
+getting.then( onGotPosition, onError );
 
 // Get Search String //////////////////////////////////////////////////////
 var activeTabURL = String( window.location.href );
@@ -105,7 +128,11 @@ if ( params != "__aftersearch__noparam__" ) {
 if ( document.getElementById( "aftersearcharea" ) == null ) {
     let AfterSearchArea = document.createElement( "div" );
     AfterSearchArea.setAttribute( "id", "aftersearcharea" );
-    AfterSearchArea.setAttribute( "class", "afarea-hover" );
+    if (IsPositionSettingBottom) {
+        AfterSearchArea.setAttribute( "class", "afarea-bottom-hover" );
+    } else {
+        AfterSearchArea.setAttribute( "class", "afarea-top-hover" );
+    }
     AfterSearchArea.setAttribute( "scrolling", "no" );
     // "AfterSearch" Label
     let Label = document.createElement( "p" );
@@ -124,7 +151,11 @@ browser.runtime.onMessage.addListener( function( message, sender, sendResponse )
         if ( document.getElementById( "aftersearcharea" ) == null ) {
             let AfterSearchArea = document.createElement( "div" );
             AfterSearchArea.setAttribute( "id", "aftersearcharea" );
-            AfterSearchArea.setAttribute( "class", "afarea-hover" );
+            if (IsPositionSettingBottom) {
+                AfterSearchArea.setAttribute( "class", "afarea-bottom-hover" );
+            } else {
+                AfterSearchArea.setAttribute( "class", "afarea-top-hover" );
+            }
             AfterSearchArea.setAttribute( "scrolling", "no" );
             // "AfterSearch" Label
             let Label = document.createElement( "p" );
@@ -147,7 +178,7 @@ browser.runtime.onMessage.addListener( function( message, sender, sendResponse )
         
         // Create a remove highlight button
         let removebutton = document.createElement( "button" );
-        removebutton.textContent = "Remove highlights";
+        removebutton.textContent = "Clear";
         removebutton.classList.add( "flatbutton_remove" );
         removebutton.setAttribute( "id", "flatbutton_aswe_removehighlight" );
         removebutton.onclick = function( ){ onRemoveButton(); }
@@ -157,13 +188,25 @@ browser.runtime.onMessage.addListener( function( message, sender, sendResponse )
         if ( document.getElementById( "aftersearcharea" ) != null ) {
             if ( afweMode == 0 ) {
                 // Default view: hover
-                document.getElementById( "aftersearcharea" ).setAttribute( "class", "afarea-hover" );
+                if (IsPositionSettingBottom) {
+                    document.getElementById( "aftersearcharea" ).setAttribute( "class", "afarea-bottom-hover" );
+                } else {
+                    document.getElementById( "aftersearcharea" ).setAttribute( "class", "afarea-top-hover" );
+                }
             } else if ( afweMode == 1 ) {
                 // Second view: force shown
-                document.getElementById( "aftersearcharea" ).setAttribute( "class", "afarea-shown" );
+                if (IsPositionSettingBottom) {
+                    document.getElementById( "aftersearcharea" ).setAttribute( "class", "afarea-bottom-shown" );
+                } else {
+                    document.getElementById( "aftersearcharea" ).setAttribute( "class", "afarea-top-shown" );
+                }
             } else if ( afweMode == 2 ) {
                 // Third view: force not to shown
-                document.getElementById( "aftersearcharea" ).setAttribute( "class", "afarea-nottoshown" );
+                if (IsPositionSettingBottom) {
+                    document.getElementById( "aftersearcharea" ).setAttribute( "class", "afarea-bottom-nottoshown" );
+                } else {
+                    document.getElementById( "aftersearcharea" ).setAttribute( "class", "afarea-top-nottoshown" );
+                }
             }
         }
     }

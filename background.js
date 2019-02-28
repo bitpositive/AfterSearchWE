@@ -1,8 +1,8 @@
 // -*- coding:utf-8-unix -*-
 
-var buttonPosOffset = 23;
-var scrollOffset = 180;
-var asweMode = 0;
+var ButtonPosOffset = 23;
+var ScrollOffset = 180;
+var AsweMode = 0;
 
 function found( flag, height, pageSize, findResults ) {
     var results = findResults;
@@ -23,7 +23,7 @@ function found( flag, height, pageSize, findResults ) {
                     for (var i = 0; i < results.rectData.length; i++) {
                         if ( results.rectData[i].rectsAndTexts.rectList[0] != void 0 ) {
                             var pos = results.rectData[i].rectsAndTexts.rectList[0].top;                        
-                            if ( i == 0 || ( pos != tempPos && pos > scrollOffset && pos < pageSize - ( height - scrollOffset ) && ( pos > height - buttonPosOffset + 5 || pos < height - buttonPosOffset - 5 ) ) ) {
+                            if ( i == 0 || ( pos != tempPos && pos > ScrollOffset && pos < pageSize - ( height - ScrollOffset ) && ( pos > height - ButtonPosOffset + 5 || pos < height - ButtonPosOffset - 5 ) ) ) {
                                 poses.push( pos );
                             }
                             tempPos = pos;                            
@@ -46,7 +46,7 @@ function found( flag, height, pageSize, findResults ) {
                     // get the scroll position list
                     var poses = item2[String( id ) + "_poses"];
                     
-                    var top = poses[count] - scrollOffset;
+                    var top = poses[count] - ScrollOffset;
                     browser.tabs.executeScript({
                         code: "window.scrollTo( 0, " + top + " );"
                     });
@@ -110,7 +110,7 @@ browser.tabs.onRemoved.addListener( function( tabId, info ) {
     browser.storage.local.remove( [String( tabId ) + "_count"], function() {} );
 
     let data = {};
-    data["asweMode"] = asweMode;
+    data["AsweMode"] = AsweMode;
     browser.storage.local.set( data, function() {} );
 });
 
@@ -128,15 +128,15 @@ browser.tabs.onCreated.addListener( function( tab ) {
         } );
     }
     
-    browser.storage.local.get( ["asweMode"], function( item ) {
-        if ( typeof item["asweMode"] != 'string' ) {
+    browser.storage.local.get( ["AsweMode"], function( item ) {
+        if ( typeof item["AsweMode"] != 'string' ) {
             let data = {};
-            data["asweMode"] = 0;
+            data["AsweMode"] = 0;
             browser.storage.local.set( data, function() {} );
 
-            asweMode = data["asweMode"];
+            AsweMode = data["AsweMode"];
         } else {
-            asweMode = item["asweMode"];
+            AsweMode = item["AsweMode"];
         }
         
     } );
@@ -147,7 +147,7 @@ browser.tabs.onUpdated.addListener( function( tabId, info,  urls = ["http://*/*"
         // Change mode when switched tabs
         let message = {
             cmd: "changeModeAFWE",
-            mode: asweMode
+            mode: AsweMode
         };
         browser.tabs.sendMessage( tabId, message, function() {} );
     }
@@ -158,39 +158,39 @@ function changeModeAFWE( result ) {
     let id = result.shift().id;
     let message = {
         cmd: "changeModeAFWE",
-        mode: asweMode
+        mode: AsweMode
     };
     browser.tabs.sendMessage( id, message, function() {} );
 }
 
 function updateIcon() {
-    if ( asweMode == 0 ) {
+    if ( AsweMode == 0 ) {
         browser.browserAction.setTitle({title: "Mode: Mouseover"});
         browser.browserAction.setIcon(
             {
                 path: {
-                    48: "icons/aftersearchwe_icon_default_48.png",
-                    96: "icons/aftersearchwe_icon_default_96.png"
+                    48: "icons/ASWE_icon_normal_48.png",
+                    96: "icons/ASWE_icon_normal_96.png"
                 }
             }
         );
-    } else if ( asweMode == 1 ) {
+    } else if ( AsweMode == 1 ) {
         browser.browserAction.setTitle({title: "Mode: Always Shown"});
         browser.browserAction.setIcon(
             {
                 path: {
-                    48: "icons/aftersearchwe_icon_green_48.png",
-                    96: "icons/aftersearchwe_icon_green_96.png"
+                    48: "icons/ASWE_icon_shown_48.png",
+                    96: "icons/ASWE_icon_shown_96.png"
                 }
             }
         );
-    } else if ( asweMode == 2 ) {
+    } else if ( AsweMode == 2 ) {
         browser.browserAction.setTitle({title: "Mode: Disable"});
         browser.browserAction.setIcon(
             {
                 path: {
-                    48: "icons/aftersearchwe_icon_red_48.png",
-                    96: "icons/aftersearchwe_icon_red_96.png"
+                    48: "icons/ASWE_icon_disable_48.png",
+                    96: "icons/ASWE_icon_disable_96.png"
                 }
             }
         );
@@ -198,10 +198,10 @@ function updateIcon() {
 }
 
 browser.browserAction.onClicked.addListener( function() {
-    if ( asweMode < 2 ) {
-        asweMode = asweMode + 1;
+    if ( AsweMode < 2 ) {
+        AsweMode = AsweMode + 1;
     } else {
-        asweMode = 0;
+        AsweMode = 0;
     }
     updateIcon();
     browser.tabs.query( {active: true, currentWindow: true} ).then( changeModeAFWE.bind( this ) );
