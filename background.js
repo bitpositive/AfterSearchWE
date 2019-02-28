@@ -108,10 +108,6 @@ browser.runtime.onMessage.addListener( function( req, sender, response ) {
 browser.tabs.onRemoved.addListener( function( tabId, info ) {
     browser.storage.local.remove( [String( tabId ) + "_str"], function() {} );
     browser.storage.local.remove( [String( tabId ) + "_count"], function() {} );
-
-    let data = {};
-    data["AsweMode"] = AsweMode;
-    browser.storage.local.set( data, function() {} );
 });
 
 // タブを開くとき
@@ -127,19 +123,12 @@ browser.tabs.onCreated.addListener( function( tab ) {
             browser.storage.local.set( data, function() {} );
         } );
     }
-    
-    browser.storage.local.get( ["AsweMode"], function( item ) {
-        if ( typeof item["AsweMode"] != 'string' ) {
-            let data = {};
-            data["AsweMode"] = 0;
-            browser.storage.local.set( data, function() {} );
 
-            AsweMode = data["AsweMode"];
-        } else {
-            AsweMode = item["AsweMode"];
-        }
-        
-    } );
+    let message = {
+        cmd: "changeModeAFWE",
+        mode: AsweMode
+    };
+    browser.tabs.sendMessage( tabId, message, function() {} );
 });
 
 browser.tabs.onUpdated.addListener( function( tabId, info,  urls = ["http://*/*", "https://*/*", "ftp://*/*" ] ) {
